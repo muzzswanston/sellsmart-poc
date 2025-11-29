@@ -1,0 +1,26 @@
+[build]
+  builder = "NIXPACKS"
+
+[[services]]
+name = "backend"
+source = ["backend/"]
+primary = true
+
+  [[services.ports]]
+  port = 5000
+  handler = "http"
+
+  [services.env]
+  FLASK_ENV = "production"
+
+[[services]]
+name = "frontend"
+source = ["frontend/build/web/"]
+
+  [[services.ports]]
+  port = 80
+  handler = "http"
+
+[[services]]
+name = "database"
+primary = true
