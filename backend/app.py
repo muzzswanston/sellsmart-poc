@@ -10,6 +10,7 @@ from gumtree_scraper import scrape_gumtree_prices
 from ebay_prices import get_ebay_prices
 from database import save_analysis, get_analyses
 
+
 load_dotenv()
 app = Flask(__name__)
 CORS(app, resources={r"/*": {"origins": "*"}})
