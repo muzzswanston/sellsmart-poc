@@ -1,0 +1,4 @@
+# frontend/render.yaml  ← THIS WORKS EVERYWHERE
+type: static
+buildCommand: flutter pub get && flutter build web --release --web-renderer canvaskit
+publishDirectory: build/web
