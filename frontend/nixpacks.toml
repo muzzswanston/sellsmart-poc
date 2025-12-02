@@ -1,14 +1,13 @@
-# frontend/nixpacks.toml   ← THIS FILE SOLVES EVERYTHING
-
+# frontend/nixpacks.toml  ← THIS FILE FIXES EVERYTHING
 [phases.setup]
-  nixPkgs = ["...", "flutter", "git"]   # installs Flutter + git
+  nixPkgs = ["...", "flutter", "git"]
 
 [phases.build]
   cmds = [
     "flutter config --no-analytics",
     "flutter pub get",
-    "flutter build web --release --web-renderer canvaskit"   # canvaskit = most compatible
+    "flutter build web --release --web-renderer canvaskit"
   ]
 
 [static]
-  publishDirectory = "build/web"
+  publishDirectory = "build/web"    # ← EXACTLY THIS
