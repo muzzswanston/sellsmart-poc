@@ -1,13 +1,1 @@
-# frontend/nixpacks.toml  ← THIS FILE FIXES EVERYTHING
-[phases.setup]
-  nixPkgs = ["...", "flutter", "git"]
 
-[phases.build]
-  cmds = [
-    "flutter config --no-analytics",
-    "flutter pub get",
-    "flutter build web --release --web-renderer canvaskit"
-  ]
-
-[static]
-  publishDirectory = "build/web"    # ← EXACTLY THIS
