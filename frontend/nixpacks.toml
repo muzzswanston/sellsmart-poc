@@ -9,4 +9,4 @@
   ]
 
 [start]
-  cmd = "echo 'Static site - no start command needed'
+  cmd = "echo 'Static site - no start command needed'"
