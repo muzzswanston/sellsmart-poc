@@ -1,12 +1,14 @@
-# frontend/nixpacks.toml
+# frontend/nixpacks.toml   ← THIS FILE SOLVES EVERYTHING
+
 [phases.setup]
-  nixPkgs = ["...", "flutter"]   # ← this installs Flutter automatically
+  nixPkgs = ["...", "flutter", "git"]   # installs Flutter + git
 
 [phases.build]
   cmds = [
+    "flutter config --no-analytics",
     "flutter pub get",
-    "flutter build web --release"
+    "flutter build web --release --web-renderer canvaskit"   # canvaskit = most compatible
   ]
 
-[start]
-  cmd = "echo 'Static site - no start command needed'"
+[static]
+  publishDirectory = "build/web"
