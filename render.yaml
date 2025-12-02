@@ -1,0 +1,22 @@
+# render.yaml ← THIS IS THE MAGIC FILE (works on Render, Railway, Fly.io, etc.)
+services:
+  - type: web
+    name: sellsmart-backend
+    repo: .
+    rootDirectory: backend
+    buildCommand: pip install -r requirements.txt
+    startCommand: gunicorn main:app --bind=0.0.0.0:$PORT --workers=1 --timeout=120
+    env: python
+
+  - type: static
+    name: sellsmart-frontend
+    repo: .
+    rootDirectory: frontend
+    buildCommand: >
+      curl -fsSL https://storage.flutter.dev/flutter_infra_release/releases/stable/linux/flutter_linux_3.24.3-stable.tar.xz -o flutter.tar.xz &&
+      tar xf flutter.tar.xz &&
+      export PATH="$PATH:`pwd`/flutter/bin" &&
+      flutter config --no-analytics &&
+      flutter pub get &&
+      flutter build web --release --web-renderer canvaskit
+    publishDirectory: build/web
