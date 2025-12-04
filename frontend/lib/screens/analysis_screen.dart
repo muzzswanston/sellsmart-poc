@@ -25,7 +25,7 @@ class _AnalysisScreenState extends State<AnalysisScreen> {
   Future<void> _analyzeImage() async {
     setState(() => _loading = true);
 
-    var uri = Uri.parse('https://sellsmart-backend.onrender.com/analyze'); // ← CHANGE IF YOUR BACKEND IS ELSEWHERE
+    var uri = Uri.parse('https://sellsmart-poc.onrender.com/analyze'); // ← CHANGE IF YOUR BACKEND IS ELSEWHERE
     var request = http.MultipartRequest('POST', uri);
     request.files.add(await http.MultipartFile.fromPath('image', widget.imagePath));
 
