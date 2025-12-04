@@ -3,7 +3,7 @@
 .flutter-plugins
 .flutter-plugins-dependencies
 .packages
-build/
+#build/
 ios/Flutter/.last_build_id
 ios/Flutter/App.framework
 ios/Flutter/Flutter.framework
