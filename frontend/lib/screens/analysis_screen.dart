@@ -1,8 +1,8 @@
 // frontend/lib/screens/analysis_screen.dart
 import 'dart:io';
+import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
-import 'dart:convert';
 
 class AnalysisScreen extends StatefulWidget {
   final String imagePath;
@@ -25,7 +25,7 @@ class _AnalysisScreenState extends State<AnalysisScreen> {
   Future<void> _analyzeImage() async {
     setState(() => _loading = true);
 
-    var uri = Uri.parse('https://sellsmart-poc.onrender.com/analyze'); // ← CHANGE IF YOUR BACKEND IS ELSEWHERE
+    var uri = Uri.parse('https://YOUR_BACKEND_URL_HERE/analyze'); // ← CHANGE THIS
     var request = http.MultipartRequest('POST', uri);
     request.files.add(await http.MultipartFile.fromPath('image', widget.imagePath));
 
@@ -70,13 +70,17 @@ class _AnalysisScreenState extends State<AnalysisScreen> {
                           children: [
                             Image.file(File(widget.imagePath), height: 300, fit: BoxFit.cover),
                             const SizedBox(height: 20),
-                            Text('Item: ${_result['data']?['item_name'] ?? 'Unknown'}',
-                                style: Theme.of(context).textTheme.headlineSmall),
-                            Text('Condition: ${_result['data']?['condition'] ?? 'Unknown'}'),
-                            Text('Confidence: ${_result['data']?['confidence'] ?? 'N/A'}'),
-                            const SizedBox(height: 20),
-                            const Text('Full JSON:', style: TextStyle(fontWeight: FontWeight.bold)),
-                            SelectableText(json.encode(_result, indent: 2)),
+                            Text(
+                              'Item: ${_result['data']?['item_name'] ?? 'Unknown'}',
+                              style: Theme.of(context).textTheme.headlineSmall,
+                            ),
+                            const SizedBox(height: 30),
+                            const Text('Full JSON Response:', style: TextStyle(fontWeight: FontWeight.bold)),
+                            const SizedBox(height: 10),
+                            SelectableText(
+                              const JsonEncoder.withIndent('  ').convert(_result), // ← FIXED: pretty print
+                              style: const TextStyle(fontFamily: 'monospace', fontSize: 12),
+                            ),
                           ],
                         ),
                       ),
