@@ -1,12 +1,11 @@
+// frontend/lib/screens/home_screen.dart
 import 'package:flutter/material.dart';
 import 'package:camera/camera.dart';
-import 'package:flutter_spinkit/flutter_spinkit.dart';
-import 'analysis_screen.dart';
+import 'analysis_screen.dart';  // Import the analysis screen
 
 class HomeScreen extends StatefulWidget {
   final List<CameraDescription> cameras;
-
-  const HomeScreen({super.key, required this.cameras});
+  const HomeScreen({Key? key, required this.cameras}) : super(key: key);
 
   @override
   State<HomeScreen> createState() => _HomeScreenState();
@@ -97,9 +96,10 @@ class _HomeScreenState extends State<HomeScreen> {
             )
           else
             const Center(
-              child: SpinKitFadingCircle(
-                color: Colors.green,
-                size: 50.0,
+              // FIXED: Use built-in CircularProgressIndicator
+              child: CircularProgressIndicator(
+                valueColor: AlwaysStoppedAnimation<Color>(Colors.green),
+                strokeWidth: 3.0,
               ),
             ),
           Positioned(
@@ -148,9 +148,14 @@ class _HomeScreenState extends State<HomeScreen> {
                           mainAxisAlignment: MainAxisAlignment.center,
                           children: [
                             if (_isLoading)
-                              const SpinKitFadingCircle(
-                                color: Colors.green,
-                                size: 20.0,
+                              // FIXED: Use built-in CircularProgressIndicator
+                              const SizedBox(
+                                width: 20,
+                                height: 20,
+                                child: CircularProgressIndicator(
+                                  valueColor: AlwaysStoppedAnimation<Color>(Colors.green),
+                                  strokeWidth: 2.0,
+                                ),
                               )
                             else
                               const Icon(
@@ -159,9 +164,9 @@ class _HomeScreenState extends State<HomeScreen> {
                                 size: 24,
                               ),
                             const SizedBox(width: 10),
-                            const Text(
-                              'Analyze Item',
-                              style: TextStyle(
+                            Text(
+                              _isLoading ? 'Taking Photo...' : 'Analyze Item',
+                              style: const TextStyle(
                                 fontSize: 18,
                                 fontWeight: FontWeight.bold,
                                 color: Colors.green,
