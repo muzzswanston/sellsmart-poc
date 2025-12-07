@@ -1,33 +1,50 @@
-name: Deploy Flutter Web to Firebase
+# .github/workflows/deploy-web.yml
+name: Deploy Flutter Web to Firebase Hosting
 
 on:
   push:
     branches: [ main ]
-  workflow_dispatch:
+  workflow_dispatch:  # Manual trigger
 
 jobs:
   build-and-deploy:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
+      - name: Checkout repository
+        uses: actions/checkout@v4
 
-      - uses: subosito/flutter-action@v2
+      - name: Set up Flutter
+        uses: subosito/flutter-action@v2
         with:
           flutter-version: '3.24.3'
           channel: stable
+          cache: true
 
-      - run: flutter config --enable-web
+      - name: Enable web support
+        run: |
+          flutter config --enable-web
+          flutter create --platforms web .
         working-directory: frontend
 
-      - run: flutter pub get
+      - name: Install dependencies
+        run: flutter pub get
         working-directory: frontend
 
-      - run: flutter build web --release --web-renderer canvaskit
+      - name: Build Flutter Web
+        run: flutter build web --release --web-renderer canvaskit
         working-directory: frontend
 
-      - uses: w9jds/firebase-action@master
-        with:
-          args: deploy --only hosting
+      - name: Install Firebase CLI
+        run: npm install -g firebase-tools
+
+      - name: Create service account key file
+        run: echo "${{ secrets.GOOGLE_APPLICATION_CREDENTIALS_JSON }}" > key.json
+
+      - name: Deploy to Firebase Hosting
+        run: firebase deploy --only hosting --project sellsmart-poc
         env:
-          FIREBASE_TOKEN: ${{ secrets.FIREBASE_TOKEN }}
-          PROJECT_ID: sellsmart-poc   # ← change if your project ID is different
+          GOOGLE_APPLICATION_CREDENTIALS: key.json
+
+      - name: Clean up key file
+        if: always()
+        run: rm key.json
