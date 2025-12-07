@@ -4,7 +4,7 @@ name: Deploy Flutter Web to Firebase Hosting
 on:
   push:
     branches: [ main ]
-  workflow_dispatch:  # Manual trigger
+  workflow_dispatch:
 
 jobs:
   build-and-deploy:
@@ -34,17 +34,9 @@ jobs:
         run: flutter build web --release --web-renderer canvaskit
         working-directory: frontend
 
-      - name: Install Firebase CLI
-        run: npm install -g firebase-tools
-
-      - name: Create service account key file
-        run: echo "${{ secrets.GOOGLE_APPLICATION_CREDENTIALS_JSON }}" > key.json
-
       - name: Deploy to Firebase Hosting
-        run: firebase deploy --only hosting --project sellsmart-poc
+        uses: wzieba/firebase-action@v2  # Reliable action for hosting
+        with:
+          args: deploy --only hosting --project sellsmart-poc
         env:
-          GOOGLE_APPLICATION_CREDENTIALS: key.json
-
-      - name: Clean up key file
-        if: always()
-        run: rm key.json
+          FIREBASE_SERVICE_ACCOUNT: ${{ secrets.FIREBASE_SERVICE_ACCOUNT }}  # Uses the JSON secret
